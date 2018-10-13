@@ -17,8 +17,8 @@ const getWord = (words, word, count, targetList) => {
 
 	const _word = ((nextWords) => {
 		// return random word if nextwords is none
-		// or small random chance
-		if(!nextWords || nextWords.length === 0 || randomInt(0, 10) < 1) {
+		// or small random chance, no random chance, ben said its better
+		if(!nextWords || nextWords.length === 0) {
 			// optimize this
 			const keys = Object.keys(words);
 			return keys[randomInt(0, keys.length)];
