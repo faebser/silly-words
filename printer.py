@@ -1,6 +1,7 @@
 import textwrap
 import sys
 from functools import partial
+import datetime
 
 LINEFEED = [chr(10)]
 CR = [chr(13)]
@@ -57,6 +58,8 @@ with open("/dev/usb/lp0", "w") as printer:
     bla = sys.stdin.read()
     counter, text = bla.splitlines()
 
+    now = datetime.now()
+
     _w(RESET)
     w(THICK_HR)
     _w(LINEFEED)
@@ -81,7 +84,7 @@ with open("/dev/usb/lp0", "w") as printer:
     w(counter)  # 3 counter
     _w(LEFT)
     _w(LINEFEED)
-    w("Linz, 12.06.2018")
+    w("Linz, {}.{}.{}".format(now.day, now.month, now.year))
     _w(LINEFEED)
     _w(LINEFEED)
     _w(LINEFEED)
