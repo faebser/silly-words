@@ -2,9 +2,11 @@ defmodule LocalYamichiWeb.LikeController do
   use LocalYamichiWeb, :controller
   alias LocalYamichi.Count
 
+  @printer_path Application.get_env(:local_yamichi, :printer)
+
   def like(conn, %{"name" => name, "phrase" => phrase}) do
   	counter = Count.get_and_update
-  	port = Port.open({:spawn, "python2.7 /home/faebser/workspace/yamichi/printer.py"}, [:binary])
+  	port = Port.open({:spawn, @printer_path}, [:binary])
   	send port, {self(), {:command, counter <> "\n"}}
   	send port, {self(), {:command, phrase <> "\n"}}
   	send port, {self(), :close}

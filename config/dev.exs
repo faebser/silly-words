@@ -14,6 +14,9 @@ config :local_yamichi, LocalYamichiWeb.Endpoint,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
+config :local_yamichi, :printer,
+  "python2.7 /home/faebser/workspace/yamichi/printer.py"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -47,5 +50,3 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
-
-config :printer, :path, "python2.7 /home/faebser/workspace/yamichi/printer.py"
