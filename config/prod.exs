@@ -20,7 +20,7 @@ config :local_yamichi, LocalYamichiWeb.Endpoint,
   
 
 config :local_yamichi, :printer,
-  "python2.7 /home/pi/local_yamichi/printer.py"
+  "python2.7 /home/pi/silly-words/printer.py"
 
 
 # Do not print debug messages in production
