@@ -1,0 +1,215 @@
+@font-face {
+    font-family: Plex Sans;
+    font-style: normal;
+  	font-weight: 500;
+    src: url(/fonts/IBMPlexSans-Medium.woff2) format("woff2"),
+         url(/fonts/IBMPlexSans-Medium.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'fontello';
+  src: url('/fonts/fontello.eot?17910314');
+  src: url('/fonts/fontello.eot?17910314#iefix') format('embedded-opentype'),
+       url('/fonts/fontello.woff2?17910314') format('woff2'),
+       url('/fonts/fontello.woff?17910314') format('woff'),
+       url('/fonts/fontello.ttf?17910314') format('truetype'),
+       url('/fonts/fontello.svg?17910314#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+ 
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+ 
+.icon-heart:before { content: '\e800'; } /* '' */
+
+html {
+	box-sizing: border-box;
+	color: rgba(0, 0, 0, 1);
+	font-family: 'Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	line-height: 1.4;
+	overflow: hidden;
+}
+
+#app {
+	display: flex;
+	height: 25vh;
+	width: 100vw;
+	flex-direction: column;
+	justify-content: center;
+	transition: height 0.3s ease;
+}
+
+#app.open {
+	height: 90vh;
+}
+
+#app p {
+	text-align: center;
+	font-size: 3rem;
+	margin: 0 1rem;
+	padding: 0 1rem;
+}
+
+#controls {
+	display: flex;
+	margin: 3rem auto;
+	width: 33%;
+	justify-content: center;
+}
+
+#controls button,
+#overlay > div button,
+#overlay > div input {
+	font-family: 'Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+	padding: 0.5rem 1.5rem;
+	border: none;
+	background-color: white;
+	font-size: 1.3rem;
+	outline: 0;
+	cursor: pointer;
+	color: rgba(0, 0, 0, 1);
+	border-radius: 4px;
+	transition: color 0.25s linear, background-color 0.25s linear;
+}
+
+#controls button:focus {
+	outline: 0;
+}
+
+#controls button:hover,
+#overlay > div button:hover {
+	color: rgba(0,0,0,1);
+	background-color: rgb(225, 225, 225);
+}
+
+#controls button.disabled,
+#controls button.disbled:hover,
+#controls #like.disabled,
+#controls #like.disabled:hover {
+	color: rgb(245, 245, 245);
+	background-color: rgb(225, 225, 225);
+}
+
+#controls button::-moz-focus-inner {
+  border: 0;
+}
+
+#controls #like {
+	margin-left: 2.5rem;
+}
+
+#controls #like {
+	color: rgb(255, 170, 170);
+	font-size: 2rem;
+}
+
+#controls #like:hover {
+	color: rgb(255, 0, 0);
+}
+
+#info {
+	display: flex;
+	height: 75vh;
+	width: 100vw;
+	flex-direction: column;
+	justify-content: flex-start;
+	transition: height 0.3s ease;
+}
+
+#info p,
+#info div {
+	margin: 0 auto;
+	font-size: 1rem;
+	max-width: 32rem;
+}
+
+#info p {
+	margin: 0 auto 1rem auto;
+}
+
+#info p.arrow {
+	transition: transform 0.2s linear;
+}
+
+#info.closed p.arrow {
+	transform: rotate(180deg);
+}
+
+#info div {
+	width: 45%;
+	background-color: white;
+	padding: 1rem;
+}
+
+#overlay {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none; /* flex */
+	flex-direction: column;
+	justify-content: center;
+}
+
+#overlay > div {
+	padding: 1rem;
+	margin: 0 auto;
+	max-width: 40rem;
+	background-color: rgba(225, 225, 225, 0.99);
+	border: 5px solid rgb(240, 240, 240);
+}
+
+#overlay > div p {
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+	text-align: left;
+}
+
+#overlay > div h2 {
+	margin-left: 0.5rem;
+}
+
+#overlay > div input {
+	margin: 0.75rem 0.5rem 1rem 1.9rem;
+}

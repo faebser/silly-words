@@ -1,0 +1,34 @@
+
+    <div id="app" class="open">
+      <div id="overlay">
+        <div>
+          <h2>Thanks!</h2>
+          <p>for discovering <strong id="b-word-goes-here">Blab asdf asldfasdf </strong>. I'm keeping a list of all words discovered at <a href="https://tofu.wtf/buzzwords">tofu.wtf/buzzwords</a> and I would like to add a name or something next to it. You know, so you can brag to your friends about it.</p>
+          <p>I'm gonna keep the info entered below for 30 days, then I'm going to exchange it with a random word to my liking.</p>
+          <input type="text" placeholder="a name" name="name" id="name">
+          <button id="send">Send</button>
+        </div>
+      </div>
+      <p id="buzzword">Loading JSON</p>
+      <div id="controls">
+        <button id="next" class="disabled">next</button>
+        <button id="like" class="icon-heart disabled"></button>
+      </div>
+    </div>
+    <div id="info" class="closed">
+        <p class="arrow">&darr;</p>
+        <p>info</p>
+        <div>
+          <h2>Everything devolves into silly words</h2>
+          <h3>Fabian Frei, 2018</h3>
+                <p id="generation"></p>
+          <p>
+                    <blockquote>In capitalism, that is to say, all that is solid melts into PR.<br>&mdash; <small>Mark Fisher, Capitalist Realism</small></blockquote>
+                </p>
+<p>
+This is a generator for sentences of our time. It uses the product descriptions taken from the most ridiculous categories of <a href="https://www.producthunt.com/">product hunt</a> to amuse you.
+</p><!--<p>
+<strong>Usage:</strong> Click on the next button to generate a new sentence. If you access this website via the <a href="dat://everything-devolves-into-silly-words-faebser.hashbase.io/">dat:// protocol</a> in beaker browser you can also like it and add your choice of sentence to the corpus.
+</p> -->
+      </div>
+    </div>
