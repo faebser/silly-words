@@ -2,7 +2,8 @@ const BEGINNING = "-B-";
 const END = "-E-";
 
 const buzzing = (words) => {
-	return getWord(words, BEGINNING, randomInt(5, 15), [])
+	const keys = Object.keys(words);
+	return getWord(words, BEGINNING, randomInt(1, 20), [], keys)
 			.reverse()
 			.reduce((acc, el) => {
 				if(el === "-E-") return acc;
@@ -11,7 +12,7 @@ const buzzing = (words) => {
 			});
 }
 
-const getWord = (words, word, count, targetList) => {
+const getWord = (words, word, count, targetList, keys) => {
 	
 	const nextWords = words[word];
 
@@ -20,18 +21,20 @@ const getWord = (words, word, count, targetList) => {
 		// or small random chance, no random chance, ben said its better
 		if(!nextWords || nextWords.length === 0) {
 			// optimize this
-			const keys = Object.keys(words);
 			return keys[randomInt(0, keys.length)];
 		}
 		return nextWords[randomInt(0, nextWords.length)];
 	})(nextWords);
 
 	if (count === 0) { // we reached zero before END
+		// change this so that it forces to find the next END
+		console.log("reached end");
 		targetList.push(_word);
 		return targetList;
 	}
 
 	if (_word === END) { // we reached end
+		console.log("reached END prematurely", count);
 		return targetList;
 	}
 
@@ -97,14 +100,28 @@ const app = () => {
     				};
     				buzzwords.textContent = bound_buzz();
     				// do all the init here
-    				next.addEventListener('click', exchange.bind(null, bound_buzz, buzzwords));
-    				next.classList.remove('disabled');
+    				//next.addEventListener('click', exchange.bind(null, bound_buzz, buzzwords));
+    				//next.classList.remove('disabled');
 
     				// info
 
     				info.addEventListener('click', () => {
     					app.classList.toggle("open");
     					info.classList.toggle("closed");
+    				});
+
+    				document.addEventListener('keyup', (e) => {
+    					// L = 76, N == 78
+    					if(e.keyCode !== 76 && e.keyCode !== 78) {
+    						return;
+    					}
+    					// L aka like
+    					if(e.keyCode === 76) { 
+    						return;
+    					}
+    					// N aka next
+    					exchange(bound_buzz, buzzwords);
+    					return;
     				});
 
     				name_button.addEventListener('click', () => {
@@ -153,5 +170,49 @@ const app = () => {
     			});
 	    });
 };
+
+const benchmark = () => {
+	'use strict';
+	fetch("data.json")
+    	.then((response) => {
+    		response.text()
+    			.then((text) => {
+    				const words = JSON.parse(text);
+
+    				console.log("start benchmark");
+
+    				// run old and new
+					const keys = Object.keys(words);
+					let t1 = performance.now()
+					for (var i = 100000 - 1; i >= 0; i--) {
+						getWord(words, BEGINNING, randomInt(5, 15), [])
+							.reverse()
+							.reduce((acc, el) => {
+								if(el === "-E-") return acc;
+								if(el == "," || el == ".") return acc + el;
+								return acc + " " + el;
+							});
+					}
+					let time1 = performance.now() - t1;
+
+					let t2 = performance.now();
+					for (var i = 100000 - 1; i >= 0; i--) {
+						getWord2(words, BEGINNING, randomInt(5, 15), [], keys)
+							.reverse()
+							.reduce((acc, el) => {
+								if(el === "-E-") return acc;
+								if(el == "," || el == ".") return acc + el;
+								return acc + " " + el;
+							});
+					}
+					let time2 = performance.now() - t2;
+
+					console.log("t1", time1, "ops/s", 100000/time1);
+					console.log("t2", time2, "ops/s", 100000/time2);
+					console.log("differnece", time1 - time2);
+    			});
+    		});
+	
+}
 
 document.addEventListener("DOMContentLoaded", app);
