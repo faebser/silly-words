@@ -1,7 +1,7 @@
 import textwrap
 import sys
 from functools import partial
-import datetime
+from datetime import datetime
 
 LINEFEED = [chr(10)]
 CR = [chr(13)]
