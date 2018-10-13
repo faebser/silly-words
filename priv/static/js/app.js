@@ -169,6 +169,7 @@ var getWord = function getWord(words, word, count, targetList) {
 		// return random word if nextwords is none
 		// or small random chance
 		if (!nextWords || nextWords.length === 0 || randomInt(0, 10) < 1) {
+			// optimize this
 			var keys = Object.keys(words);
 			return keys[randomInt(0, keys.length)];
 		}
@@ -256,7 +257,7 @@ var app = function app() {
 			});
 
 			name_button.addEventListener('click', function () {
-				var name_v = name.value;
+				var name_v = "linz";
 				name_button.textContent = "Sending...";
 				fetch("/like", {
 					method: "POST",

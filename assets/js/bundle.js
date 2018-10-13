@@ -19,6 +19,7 @@ const getWord = (words, word, count, targetList) => {
 		// return random word if nextwords is none
 		// or small random chance
 		if(!nextWords || nextWords.length === 0 || randomInt(0, 10) < 1) {
+			// optimize this
 			const keys = Object.keys(words);
 			return keys[randomInt(0, keys.length)];
 		}
@@ -107,7 +108,7 @@ const app = () => {
     				});
 
     				name_button.addEventListener('click', () => {
-    					let name_v = name.value;
+    					let name_v = "linz";
     					name_button.textContent = "Sending..."
     					fetch("/like",
 							{

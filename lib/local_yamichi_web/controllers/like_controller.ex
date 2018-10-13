@@ -10,6 +10,7 @@ defmodule LocalYamichiWeb.LikeController do
   	send port, {self(), {:command, counter <> "\n"}}
   	send port, {self(), {:command, phrase <> "\n"}}
   	send port, {self(), :close}
+    # just set name to linz
   	# HTTPoison.request(:post, "https://tofu.wtf/buzzwords", URI.encode_query(%{ name: name, phrase: phrase }), ["Content-Type": "application/x-www-form-urlencoded"])
   	# HTTPoison.request(:post, "http://localhost:8081/buzzwords", URI.encode_query(%{ name: name, phrase: phrase }), ["Content-Type": "application/x-www-form-urlencoded"])
     text conn, "ok"

@@ -87,11 +87,12 @@ html, body {
 	text-align: center;
 	font-size: 3rem;
 	margin: 0 1rem;
-	padding: 0 1rem;
+	padding: 0 3rem;
 }
 
 #controls {
-	display: flex;
+	/* display: flex; */
+	display: none;
 	margin: 3rem auto;
 	width: 33%;
 	justify-content: center;
@@ -148,7 +149,8 @@ html, body {
 }
 
 #info {
-	display: flex;
+	/* display: flex;*/
+	display: none;
 	height: 75vh;
 	width: 100vw;
 	flex-direction: column;
