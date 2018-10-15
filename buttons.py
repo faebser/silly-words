@@ -11,13 +11,13 @@ from pyautogui import press
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-GPIO.add_event_detect(BUTTON_A, GPIO.RISING)
+GPIO.add_event_detect(BUTTON_A, GPIO.RISING, bouncetime=200)
 
 def callback(pin):
 	print("pressed pin {}".format(pin))
 	press('N')
 
-GPIO.add_event_callback(BUTTON_A, callback, bouncetime=200)
+GPIO.add_event_callback(BUTTON_A, callback)
 
 
 while True:
