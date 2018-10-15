@@ -1,13 +1,18 @@
 const BEGINNING = "-B-";
 const END = "-E-";
+const PUNCTUATION = '!"#$%\'()*+,./:;<=>?@[\\]^_`{|}~'
+
+const is_punctuation = (char) => {
+	return PUNCTUATION.includes(char);
+}
 
 const buzzing = (words) => {
 	const keys = Object.keys(words);
-	return getWord(words, BEGINNING, randomInt(1, 20), [], keys)
+	return getWord(words, BEGINNING, randomInt(5, 20), [], keys)
 			.reverse()
 			.reduce((acc, el) => {
 				if(el === "-E-") return acc;
-				if(el == "," || el == ".") return acc + el;
+				if(is_punctuation(el)) return acc + el;
 				return acc + " " + el;
 			});
 }
@@ -122,6 +127,7 @@ const app = () => {
     				const bound_buzz = buzzing.bind(null, words);
     				const exchange = (_bound_buzz, _buzzwords) => {
     					stats("next");
+    					// TODO maybe add a calculating thing here
     					_buzzwords.textContent = bound_buzz();
     				};
     				buzzwords.textContent = bound_buzz();
@@ -131,10 +137,10 @@ const app = () => {
 
     				// info
 
-    				info.addEventListener('click', () => {
+    				/*info.addEventListener('click', () => {
     					app.classList.toggle("open");
     					info.classList.toggle("closed");
-    				});
+    				});*/
 
     				document.addEventListener('keyup', (e) => {
     					// L = 76, N == 78
@@ -142,7 +148,18 @@ const app = () => {
     						return;
     					}
     					// L aka like
-    					if(e.keyCode === 76) { 
+    					if(e.keyCode === 76) {
+    						let fake_name = "linz";
+    						stats("like");
+    						fetch("/like",
+							{
+								method: "POST",
+								headers: {'Content-Type':'application/x-www-form-urlencoded'},
+								body: "name=" + encodeURIComponent(fake_name) + "&phrase=" + encodeURIComponent(buzzwords.textContent)
+							})
+							.then(() => {
+								exchange(bound_buzz, buzzwords);
+							})
     						return;
     					}
     					// N aka next
@@ -150,7 +167,7 @@ const app = () => {
     					return;
     				});
 
-    				name_button.addEventListener('click', () => {
+    				/*name_button.addEventListener('click', () => {
     					let name_v = "linz";
     					name_button.textContent = "Sending..."
     					fetch("/like",
@@ -168,7 +185,7 @@ const app = () => {
     								name.value = "";
     							}, 500);
     						});
-    				});
+    				});*/
 
     				// test for DatArchive
 
@@ -196,49 +213,5 @@ const app = () => {
     			});
 	    });
 };
-
-const benchmark = () => {
-	'use strict';
-	fetch("data.json")
-    	.then((response) => {
-    		response.text()
-    			.then((text) => {
-    				const words = JSON.parse(text);
-
-    				console.log("start benchmark");
-
-    				// run old and new
-					const keys = Object.keys(words);
-					let t1 = performance.now()
-					for (var i = 100000 - 1; i >= 0; i--) {
-						getWord(words, BEGINNING, randomInt(5, 15), [])
-							.reverse()
-							.reduce((acc, el) => {
-								if(el === "-E-") return acc;
-								if(el == "," || el == ".") return acc + el;
-								return acc + " " + el;
-							});
-					}
-					let time1 = performance.now() - t1;
-
-					let t2 = performance.now();
-					for (var i = 100000 - 1; i >= 0; i--) {
-						getWord2(words, BEGINNING, randomInt(5, 15), [], keys)
-							.reverse()
-							.reduce((acc, el) => {
-								if(el === "-E-") return acc;
-								if(el == "," || el == ".") return acc + el;
-								return acc + " " + el;
-							});
-					}
-					let time2 = performance.now() - t2;
-
-					console.log("t1", time1, "ops/s", 100000/time1);
-					console.log("t2", time2, "ops/s", 100000/time2);
-					console.log("differnece", time1 - time2);
-    			});
-    		});
-	
-}
 
 document.addEventListener("DOMContentLoaded", app);

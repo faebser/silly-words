@@ -152,12 +152,17 @@ require.register("js/bundle.js", function(exports, require, module) {
 
 var BEGINNING = "-B-";
 var END = "-E-";
+var PUNCTUATION = '!"#$%\'()*+,./:;<=>?@[\\]^_`{|}~';
+
+var is_punctuation = function is_punctuation(char) {
+	return PUNCTUATION.includes(char);
+};
 
 var buzzing = function buzzing(words) {
 	var keys = Object.keys(words);
-	return getWord(words, BEGINNING, randomInt(1, 20), [], keys).reverse().reduce(function (acc, el) {
+	return getWord(words, BEGINNING, randomInt(5, 20), [], keys).reverse().reduce(function (acc, el) {
 		if (el === "-E-") return acc;
-		if (el == "," || el == ".") return acc + el;
+		if (is_punctuation(el)) return acc + el;
 		return acc + " " + el;
 	});
 };
@@ -271,6 +276,7 @@ var app = function app() {
 			var bound_buzz = buzzing.bind(null, words);
 			var exchange = function exchange(_bound_buzz, _buzzwords) {
 				stats("next");
+				// TODO maybe add a calculating thing here
 				_buzzwords.textContent = bound_buzz();
 			};
 			buzzwords.textContent = bound_buzz();
@@ -280,10 +286,10 @@ var app = function app() {
 
 			// info
 
-			info.addEventListener('click', function () {
-				app.classList.toggle("open");
-				info.classList.toggle("closed");
-			});
+			/*info.addEventListener('click', () => {
+   	app.classList.toggle("open");
+   	info.classList.toggle("closed");
+   });*/
 
 			document.addEventListener('keyup', function (e) {
 				// L = 76, N == 78
@@ -292,6 +298,15 @@ var app = function app() {
 				}
 				// L aka like
 				if (e.keyCode === 76) {
+					var fake_name = "linz";
+					stats("like");
+					fetch("/like", {
+						method: "POST",
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+						body: "name=" + encodeURIComponent(fake_name) + "&phrase=" + encodeURIComponent(buzzwords.textContent)
+					}).then(function () {
+						exchange(bound_buzz, buzzwords);
+					});
 					return;
 				}
 				// N aka next
@@ -299,23 +314,25 @@ var app = function app() {
 				return;
 			});
 
-			name_button.addEventListener('click', function () {
-				var name_v = "linz";
-				name_button.textContent = "Sending...";
-				fetch("/like", {
-					method: "POST",
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: "name=" + encodeURIComponent(name_v) + "&phrase=" + encodeURIComponent(buzzwords.textContent)
-				}).then(function () {
-					name_button.textContent = "Sent :-)";
-					window.setTimeout(function () {
-						buzzwords.textContent = bound_buzz();
-						overlay.style.display = "none";
-						name_button.textContent = "Send";
-						name.value = "";
-					}, 500);
-				});
-			});
+			/*name_button.addEventListener('click', () => {
+   	let name_v = "linz";
+   	name_button.textContent = "Sending..."
+   	fetch("/like",
+   {
+   method: "POST",
+   headers: {'Content-Type':'application/x-www-form-urlencoded'},
+   body: "name=" + encodeURIComponent(name_v) + "&phrase=" + encodeURIComponent(buzzwords.textContent)
+   })
+   		.then(() => {
+   			name_button.textContent = "Sent :-)"
+   			window.setTimeout(() => {
+   				buzzwords.textContent = bound_buzz();
+   				overlay.style.display = "none";
+   				name_button.textContent = "Send"
+   				name.value = "";
+   			}, 500);
+   		});
+   });*/
 
 			// test for DatArchive
 
@@ -340,44 +357,6 @@ var app = function app() {
     	}
     }*/
 			});
-		});
-	});
-};
-
-var benchmark = function benchmark() {
-	'use strict';
-
-	fetch("data.json").then(function (response) {
-		response.text().then(function (text) {
-			var words = JSON.parse(text);
-
-			console.log("start benchmark");
-
-			// run old and new
-			var keys = Object.keys(words);
-			var t1 = performance.now();
-			for (var i = 100000 - 1; i >= 0; i--) {
-				getWord(words, BEGINNING, randomInt(5, 15), []).reverse().reduce(function (acc, el) {
-					if (el === "-E-") return acc;
-					if (el == "," || el == ".") return acc + el;
-					return acc + " " + el;
-				});
-			}
-			var time1 = performance.now() - t1;
-
-			var t2 = performance.now();
-			for (var i = 100000 - 1; i >= 0; i--) {
-				getWord2(words, BEGINNING, randomInt(5, 15), [], keys).reverse().reduce(function (acc, el) {
-					if (el === "-E-") return acc;
-					if (el == "," || el == ".") return acc + el;
-					return acc + " " + el;
-				});
-			}
-			var time2 = performance.now() - t2;
-
-			console.log("t1", time1, "ops/s", 100000 / time1);
-			console.log("t2", time2, "ops/s", 100000 / time2);
-			console.log("differnece", time1 - time2);
 		});
 	});
 };

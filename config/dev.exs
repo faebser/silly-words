@@ -17,6 +17,9 @@ config :local_yamichi, LocalYamichiWeb.Endpoint,
 config :local_yamichi, :printer,
   "python2.7 /home/faebser/workspace/yamichi/printer.py"
 
+config :local_yamichi, :send_stats,
+    false
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

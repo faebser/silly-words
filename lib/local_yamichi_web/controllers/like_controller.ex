@@ -2,7 +2,10 @@ defmodule LocalYamichiWeb.LikeController do
   use LocalYamichiWeb, :controller
   alias LocalYamichi.Count
 
+  require Logger
+
   @printer_path Application.get_env(:local_yamichi, :printer)
+  @send_stats Application.get_env(:local_yamichi, :send_stats)
 
   def like(conn, %{"name" => name, "phrase" => phrase}) do
   	counter = Count.get_and_update
@@ -10,6 +13,10 @@ defmodule LocalYamichiWeb.LikeController do
   	send port, {self(), {:command, counter <> "\n"}}
   	send port, {self(), {:command, phrase <> "\n"}}
   	send port, {self(), :close}
+    case @send_stats do
+      true -> HTTPoison.request(:post, "https://tofu.wtf/buzzwords", URI.encode_query(%{ name: name, phrase: phrase }), ["Content-Type": "application/x-www-form-urlencoded"])
+      false -> Logger.debug "not sending like stats"
+    end
     # just set name to linz
   	# HTTPoison.request(:post, "https://tofu.wtf/buzzwords", URI.encode_query(%{ name: name, phrase: phrase }), ["Content-Type": "application/x-www-form-urlencoded"])
   	# HTTPoison.request(:post, "http://localhost:8081/buzzwords", URI.encode_query(%{ name: name, phrase: phrase }), ["Content-Type": "application/x-www-form-urlencoded"])
