@@ -17,7 +17,6 @@ GPIO.add_event_detect(BUTTON_B, GPIO.RISING, bouncetime=1000)
 
 
 def callback(pin):
-	print("pressed pin {}".format(pin))
 	if pin == BUTTON_A:
 		press('N')
 		return
