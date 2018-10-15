@@ -13,7 +13,7 @@ GPIO.setup(BUTTON_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_B, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 GPIO.add_event_detect(BUTTON_A, GPIO.RISING, bouncetime=200)
-GPIO.add_event_detect(BUTTON_A, GPIO.RISING, bouncetime=200)
+GPIO.add_event_detect(BUTTON_B, GPIO.RISING, bouncetime=200)
 
 
 def callback(pin):
