@@ -15,3 +15,5 @@ def callback(pin):
 	    ui.write(e.EV_KEY, e.KEY_L, 1)
 	    ui.write(e.EV_KEY, e.KEY_L, 0)
 	    ui.syn()
+
+GPIO.add_event_callback(BUTTON_A, callback)
