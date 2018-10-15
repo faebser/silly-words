@@ -1,5 +1,6 @@
 from evdev import uinput, ecodes as e
 import RPi.GPIO as GPIO
+import time
 
 BUTTON_A = 26
 
@@ -17,3 +18,7 @@ def callback(pin):
 	    ui.syn()
 
 GPIO.add_event_callback(BUTTON_A, callback)
+
+
+while True:
+	time.sleep(0.02)
