@@ -154,14 +154,16 @@ var BEGINNING = "-B-";
 var END = "-E-";
 
 var buzzing = function buzzing(words) {
-	return getWord(words, BEGINNING, randomInt(5, 15), []).reverse().reduce(function (acc, el) {
+	var keys = Object.keys(words);
+	return getWord(words, BEGINNING, randomInt(1, 20), [], keys).reverse().reduce(function (acc, el) {
 		if (el === "-E-") return acc;
 		if (el == "," || el == ".") return acc + el;
 		return acc + " " + el;
 	});
 };
 
-var getWord = function getWord(words, word, count, targetList) {
+var getWord = function getWord(words, word, count, targetList, keys) {
+	'use strict';
 
 	var nextWords = words[word];
 
@@ -170,24 +172,37 @@ var getWord = function getWord(words, word, count, targetList) {
 		// or small random chance, no random chance, ben said its better
 		if (!nextWords || nextWords.length === 0) {
 			// optimize this
-			var keys = Object.keys(words);
 			return keys[randomInt(0, keys.length)];
 		}
 		return nextWords[randomInt(0, nextWords.length)];
 	}(nextWords);
 
-	if (count === 0) {
+	if (count <= 0) {
 		// we reached zero before END
+		// change this so that it forces to find the next END
+		console.log("reached end with count", count);
+
+		// we find an END
+		console.log('word', word);
+		if (nextWords.includes(END)) {
+			// we just push it to targetlist and return
+			targetList.push(END);
+			return targetList;
+		}
+		// there is no end
+		// we just push the current word
+		// and continue with another recursion
 		targetList.push(_word);
-		return targetList;
+		targetList = getWord(words, _word, count - 1, targetList, keys);
 	}
 
 	if (_word === END) {
 		// we reached end
+		console.log("reached END prematurely", count);
 		return targetList;
 	}
 
-	targetList = getWord(words, _word, count - 1, targetList);
+	targetList = getWord(words, _word, count - 1, targetList, keys);
 	targetList.push(_word);
 	return targetList;
 };
@@ -239,6 +254,20 @@ var app = function app() {
 	fetch("data.json").then(function (response) {
 		response.text().then(function (text) {
 			var words = JSON.parse(text);
+
+			var endcount = 0;
+
+			for (var key in words) {
+				if (words.hasOwnProperty(key)) {
+					//console.log(key, words[key]);
+					if (words[key].includes(END)) {
+						endcount++;
+					}
+				}
+			}
+
+			console.log("found", endcount, "in", Object.keys(words).length);
+
 			var bound_buzz = buzzing.bind(null, words);
 			var exchange = function exchange(_bound_buzz, _buzzwords) {
 				stats("next");
@@ -246,14 +275,28 @@ var app = function app() {
 			};
 			buzzwords.textContent = bound_buzz();
 			// do all the init here
-			next.addEventListener('click', exchange.bind(null, bound_buzz, buzzwords));
-			next.classList.remove('disabled');
+			//next.addEventListener('click', exchange.bind(null, bound_buzz, buzzwords));
+			//next.classList.remove('disabled');
 
 			// info
 
 			info.addEventListener('click', function () {
 				app.classList.toggle("open");
 				info.classList.toggle("closed");
+			});
+
+			document.addEventListener('keyup', function (e) {
+				// L = 76, N == 78
+				if (e.keyCode !== 76 && e.keyCode !== 78) {
+					return;
+				}
+				// L aka like
+				if (e.keyCode === 76) {
+					return;
+				}
+				// N aka next
+				exchange(bound_buzz, buzzwords);
+				return;
 			});
 
 			name_button.addEventListener('click', function () {
@@ -297,6 +340,44 @@ var app = function app() {
     	}
     }*/
 			});
+		});
+	});
+};
+
+var benchmark = function benchmark() {
+	'use strict';
+
+	fetch("data.json").then(function (response) {
+		response.text().then(function (text) {
+			var words = JSON.parse(text);
+
+			console.log("start benchmark");
+
+			// run old and new
+			var keys = Object.keys(words);
+			var t1 = performance.now();
+			for (var i = 100000 - 1; i >= 0; i--) {
+				getWord(words, BEGINNING, randomInt(5, 15), []).reverse().reduce(function (acc, el) {
+					if (el === "-E-") return acc;
+					if (el == "," || el == ".") return acc + el;
+					return acc + " " + el;
+				});
+			}
+			var time1 = performance.now() - t1;
+
+			var t2 = performance.now();
+			for (var i = 100000 - 1; i >= 0; i--) {
+				getWord2(words, BEGINNING, randomInt(5, 15), [], keys).reverse().reduce(function (acc, el) {
+					if (el === "-E-") return acc;
+					if (el == "," || el == ".") return acc + el;
+					return acc + " " + el;
+				});
+			}
+			var time2 = performance.now() - t2;
+
+			console.log("t1", time1, "ops/s", 100000 / time1);
+			console.log("t2", time2, "ops/s", 100000 / time2);
+			console.log("differnece", time1 - time2);
 		});
 	});
 };

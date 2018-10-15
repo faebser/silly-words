@@ -13,6 +13,7 @@ const buzzing = (words) => {
 }
 
 const getWord = (words, word, count, targetList, keys) => {
+	'use strict';
 	
 	const nextWords = words[word];
 
@@ -26,11 +27,22 @@ const getWord = (words, word, count, targetList, keys) => {
 		return nextWords[randomInt(0, nextWords.length)];
 	})(nextWords);
 
-	if (count === 0) { // we reached zero before END
+	if (count <= 0) { // we reached zero before END
 		// change this so that it forces to find the next END
-		console.log("reached end");
+		console.log("reached end with count", count);
+
+		// we find an END
+		console.log('word', word);
+		if(nextWords.includes(END)) { 
+			// we just push it to targetlist and return
+			targetList.push(END);
+			return targetList;
+		}
+		// there is no end
+		// we just push the current word
+		// and continue with another recursion
 		targetList.push(_word);
-		return targetList;
+		targetList = getWord(words, _word, count-1, targetList, keys);
 	}
 
 	if (_word === END) { // we reached end
@@ -38,7 +50,7 @@ const getWord = (words, word, count, targetList, keys) => {
 		return targetList;
 	}
 
-	targetList = getWord(words, _word, count-1, targetList);
+	targetList = getWord(words, _word, count-1, targetList, keys);
 	targetList.push(_word);
 	return targetList;
 }
@@ -93,6 +105,20 @@ const app = () => {
     		response.text()
     			.then((text) => {
     				const words = JSON.parse(text);
+
+    				let endcount = 0;
+
+    				for (var key in words) {
+					   if (words.hasOwnProperty(key)) {
+					      //console.log(key, words[key]);
+					      if(words[key].includes(END)) {
+    						endcount++;
+    					}
+					   }
+					}
+
+    				console.log("found", endcount, "in", Object.keys(words).length);
+
     				const bound_buzz = buzzing.bind(null, words);
     				const exchange = (_bound_buzz, _buzzwords) => {
     					stats("next");
