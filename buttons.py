@@ -6,7 +6,7 @@ BUTTON_A = 26
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-GPIO.add_event_detect(4, GPIO.RISING)
+GPIO.add_event_detect(BUTTON_A, GPIO.RISING)
 
 def callback(pin):
 	print("pressed pin {}".format(pin))
