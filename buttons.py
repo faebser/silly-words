@@ -17,7 +17,7 @@ def callback(pin):
 	print("pressed pin {}".format(pin))
 	press('N')
 
-GPIO.add_event_callback(BUTTON_A, callback)
+GPIO.add_event_callback(BUTTON_A, callback, bounce_time=200)
 
 
 while True:
