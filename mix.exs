@@ -38,7 +38,8 @@ defmodule LocalYamichi.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:httpoison, "~> 1.1"}
+      {:httpoison, "~> 1.1"},
+      {:distillery, "~> 2.0"}
     ]
   end
 end
