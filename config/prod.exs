@@ -23,7 +23,7 @@ config :local_yamichi, :printer,
   "python2.7 /home/pi/silly-words/printer.py"
 
 config :local_yamichi, :send_stats,
-    false
+    true
 
 
 # Do not print debug messages in production

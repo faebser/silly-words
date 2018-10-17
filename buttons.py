@@ -18,10 +18,12 @@ GPIO.add_event_detect(BUTTON_B, GPIO.RISING, bouncetime=1000)
 
 def callback(pin):
 	if pin == BUTTON_A:
-		press('N')
+		if GPIO.input(BUTTON_A) == 1:
+			press('N')
 		return
 	if pin == BUTTON_B:
-		press('L')
+		if GPIO.input(BUTTON_B) == 1:
+			press('L')
 		return
 
 
