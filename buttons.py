@@ -12,20 +12,18 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_A, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_B, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-GPIO.add_event_detect(BUTTON_A, GPIO.RISING, bouncetime=500)
-GPIO.add_event_detect(BUTTON_B, GPIO.RISING, bouncetime=500)
+GPIO.add_event_detect(BUTTON_A, GPIO.FALLING, bouncetime=200)
+GPIO.add_event_detect(BUTTON_B, GPIO.FALLING, bouncetime=200)
 
 
 def callback(pin):
 	print("detected pin {}".format(pin))
 	print("with value {}".format(GPIO.input(pin)))
 	if pin == BUTTON_A:
-		if GPIO.input(BUTTON_A) == 1:
-			press('N')
+		press('N')
 		return
 	if pin == BUTTON_B:
-		if GPIO.input(BUTTON_B) == 1:
-			press('L')
+		press('L')
 		return
 
 
